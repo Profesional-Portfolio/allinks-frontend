@@ -1,5 +1,6 @@
 import type { User } from "@/modules/core/domain/models/user";
 
+// @ts-expect-error AuthUser extends User
 export interface AuthUser extends User {
   // Additional auth-specific fields can be added here
 }

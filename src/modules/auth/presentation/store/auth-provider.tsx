@@ -6,9 +6,9 @@ import { LogoutUseCase } from "../../application/use-cases/logout.use-case";
 import { HttpAuthRepository } from "../../infrastructure/repositories/http-auth.repository";
 import { AuthApiService } from "../../infrastructure/services/auth-api.service";
 import { TokenStorage } from "../../infrastructure/adapters/token-storage.adapter";
-import { AxiosHttpClient } from "@/modules/core/infrastructure/adapters/axios-http-client";
-import { StorageAdapter } from "@/modules/core/infrastructure/adapters/storage.adapter";
-import { API_CONFIG } from "@/modules/config/api-config";
+import { AxiosHttpClient } from "@/core/infrastructure/adapters/axios-http-client";
+import { StorageAdapter } from "@/core/infrastructure/adapters/storage.adapter";
+import { API_CONFIG } from "@/config/api-config";
 import type { LoginCredentials, RegisterData } from "../../domain/models/user";
 import { AuthContext, type AuthContextType } from "./auth-context";
 

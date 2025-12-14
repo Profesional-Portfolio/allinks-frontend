@@ -1,5 +1,5 @@
-import { StorageAdapter } from "@/modules/core/infrastructure/adapters/storage.adapter";
-import type { AuthUser } from "../../domain/models/user";
+import type { StorageAdapter } from "@/core/infrastructure/adapters/storage.adapter";
+import type { AuthUser } from "@/auth/domain/models/user";
 
 const AUTH_USER_KEY = "auth_user";
 

@@ -1,5 +1,5 @@
-import { AuthRepository } from "../../domain/repositories/auth.repository";
-import { AuthUser } from "../../domain/models/user";
+import type { AuthRepository } from "@/auth/domain/repositories/auth.repository";
+import type { AuthUser } from "@/auth/domain/models/user";
 
 export class GetCurrentUserUseCase {
   constructor(private authRepository: AuthRepository) {}

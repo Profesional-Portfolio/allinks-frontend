@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "@/modules/auth/presentation/hooks/use-auth";
-import "./HomePage.css";
+import { useAuth } from "@/auth/presentation/hooks/use-auth";
+import "./home.page.css";
 
 export const HomePage: React.FC = () => {
   const { user, logout } = useAuth();

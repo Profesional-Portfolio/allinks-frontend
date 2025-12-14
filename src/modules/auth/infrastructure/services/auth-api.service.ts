@@ -1,11 +1,11 @@
-import type { HttpClient } from "@/modules/core/domain/repositories/http-client";
-import type { ApiResponse } from "@/modules/core/domain/models/api-response";
-import { API_CONFIG } from "@/modules/config/api-config";
+import type { HttpClient } from "@/core/domain/repositories/http-client";
+import type { ApiResponse } from "@/core/domain/models/api-response";
+import { API_CONFIG } from "@/config/api-config";
 import type {
   AuthUser,
   LoginCredentials,
   RegisterData,
-} from "../../domain/models/user";
+} from "@/auth/domain/models/user";
 
 export class AuthApiService {
   constructor(private httpClient: HttpClient) {}

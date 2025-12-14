@@ -1,5 +1,5 @@
-import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
-import {
+import axios, { type AxiosInstance, type AxiosRequestConfig } from "axios";
+import type {
   HttpClient,
   RequestConfig,
 } from "../../domain/repositories/http-client";

@@ -1,11 +1,11 @@
-import { AuthRepository } from "../../domain/repositories/auth.repository";
-import {
+import type { AuthRepository } from "../../domain/repositories/auth.repository";
+import type {
   AuthUser,
   LoginCredentials,
   RegisterData,
-} from "../../domain/models/user";
-import { AuthApiService } from "../services/auth-api.service";
-import { TokenStorage } from "../adapters/token-storage.adapter";
+} from "../../domain/models";
+import type { AuthApiService } from "../services/auth-api.service";
+import type { TokenStorage } from "../adapters/token-storage.adapter";
 
 export class HttpAuthRepository implements AuthRepository {
   constructor(

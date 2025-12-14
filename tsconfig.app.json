@@ -26,7 +26,12 @@
 
     /* Path aliases */
     "paths": {
-      "@/*": ["./src/*"]
+      "baseUrl": ".",
+      "@/*": ["./src/*"],
+      "@/auth/*": ["./src/modules/auth/*"],
+      "@/home/*": ["./src/modules/home/*"],
+      "@/config/*": ["./src/modules/config/*"],
+      "@/core/*": ["./src/modules/core/*"]
     }
   },
   "include": ["src"]
