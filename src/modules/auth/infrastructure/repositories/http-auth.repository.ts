@@ -6,11 +6,20 @@ import type {
 } from "../../domain/models";
 import type { AuthApiService } from "../services/auth-api.service";
 import type { TokenStorage } from "../adapters/token-storage.adapter";
+import type { User } from "@/modules/core/domain/models/user";
+
+interface ApiUser extends Partial<User> {
+  id: string;
+  email: string;
+  username: string;
+  first_name?: string;
+  last_name?: string;
+}
 
 export class HttpAuthRepository implements AuthRepository {
   constructor(
     private apiService: AuthApiService,
-    private tokenStorage: TokenStorage
+    private tokenStorage: TokenStorage,
   ) {}
 
   async login(credentials: LoginCredentials): Promise<AuthUser> {
@@ -20,12 +29,13 @@ export class HttpAuthRepository implements AuthRepository {
       throw new Error("Invalid response from server");
     }
 
+    const apiUser = response.data.user as ApiUser;
     const user: AuthUser = {
-      id: response.data.user.id,
-      email: response.data.user.email,
-      username: response.data.user.username,
-      firstName: response.data.user.firstName,
-      lastName: response.data.user.lastName,
+      id: apiUser.id,
+      email: apiUser.email,
+      username: apiUser.username,
+      firstName: apiUser.first_name || apiUser.firstName || "",
+      lastName: apiUser.last_name || apiUser.lastName || "",
     };
 
     this.tokenStorage.saveUser(user);
@@ -39,15 +49,16 @@ export class HttpAuthRepository implements AuthRepository {
       throw new Error("Invalid response from server");
     }
 
+    const apiUser = response.data.user as ApiUser;
     const user: AuthUser = {
-      id: response.data.user.id,
-      email: response.data.user.email,
-      username: response.data.user.username,
-      firstName: response.data.user.firstName,
-      lastName: response.data.user.lastName,
+      id: apiUser.id,
+      email: apiUser.email,
+      username: apiUser.username,
+      firstName: apiUser.first_name || apiUser.firstName || "",
+      lastName: apiUser.last_name || apiUser.lastName || "",
     };
 
-    this.tokenStorage.saveUser(user);
+    // this.tokenStorage.saveUser(user);
     return user;
   }
 
@@ -70,14 +81,13 @@ export class HttpAuthRepository implements AuthRepository {
       throw new Error("User not authenticated");
     }
 
-    // Note: The profile endpoint returns minimal data (userId, email)
-    // We'll need to fetch full user data or use cached data
+    const apiUser = response.data as ApiUser;
     const user: AuthUser = {
-      id: response.data.userId,
-      email: response.data.email,
-      username: "", // Not available from profile endpoint
-      firstName: "",
-      lastName: "",
+      id: apiUser.id,
+      email: apiUser.email,
+      username: apiUser.username || "",
+      firstName: apiUser.first_name || apiUser.firstName || "",
+      lastName: apiUser.last_name || apiUser.lastName || "",
     };
 
     return user;

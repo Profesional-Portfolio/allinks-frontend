@@ -40,7 +40,7 @@ export const RegisterPage: React.FC = () => {
         firstName: formData.firstName,
         lastName: formData.lastName,
       });
-      navigate("/home");
+      navigate("/auth/login");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Registration failed");
     }

@@ -16,7 +16,7 @@ export const LoginPage: React.FC = () => {
 
     try {
       await login({ email, password });
-      navigate("/home");
+      navigate("/");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Login failed");
     }
@@ -91,7 +91,7 @@ export const LoginPage: React.FC = () => {
         <div className="auth-footer">
           <p className="auth-link-text">
             Don't have an account?{" "}
-            <Link to="/register" className="auth-link">
+            <Link to="/auth/register" className="auth-link">
               Sign up
             </Link>
           </p>

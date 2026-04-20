@@ -4,7 +4,7 @@
   align-items: center;
   justify-content: center;
   padding: 2rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #e7e7e7;
   position: relative;
   overflow: hidden;
 }
@@ -143,6 +143,7 @@
   margin-top: 0.5rem;
   position: relative;
   overflow: hidden;
+  width: max-content;
 }
 
 .btn-primary::before {
@@ -264,4 +265,20 @@
   .auth-title {
     font-size: 1.75rem;
   }
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.justify-center {
+  justify-content: center;
 }
