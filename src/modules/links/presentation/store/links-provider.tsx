@@ -9,7 +9,10 @@ import { HttpLinksRepository } from "../../infrastructure/repositories/http-link
 import { LinksApiService } from "../../infrastructure/services/links-api.service";
 import { AxiosHttpClient } from "@/core/infrastructure/adapters/axios-http-client";
 import { API_CONFIG } from "@/config/api-config";
-import type { CreateLinkData, UpdateLinkData } from "../../domain/repositories/links.repository";
+import type {
+  CreateLinkData,
+  UpdateLinkData,
+} from "../../domain/repositories/links.repository";
 import { LinksContext, type LinksContextType } from "./links-context";
 
 // Initialize dependencies
@@ -24,7 +27,9 @@ const updateLinkUseCase = new UpdateLinkUseCase(linksRepository);
 const reorderLinksUseCase = new ReorderLinksUseCase(linksRepository);
 const changeVisibilityUseCase = new ChangeVisibilityUseCase(linksRepository);
 
-export const LinksProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+export const LinksProvider: React.FC<{ children: ReactNode }> = ({
+  children,
+}) => {
   const [links, setLinks] = useState<Link[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -34,6 +39,7 @@ export const LinksProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     setError(null);
     try {
       const fetchedLinks = await getLinksUseCase.execute();
+      console.log({ fetchedLinks });
       setLinks(fetchedLinks);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to fetch links");
@@ -61,7 +67,9 @@ export const LinksProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     setError(null);
     try {
       const updatedLink = await updateLinkUseCase.execute(id, data);
-      setLinks((prev) => prev.map((link) => (link.id === id ? updatedLink : link)));
+      setLinks((prev) =>
+        prev.map((link) => (link.id === id ? updatedLink : link)),
+      );
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to update link");
       throw err;
@@ -93,9 +101,13 @@ export const LinksProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     setError(null);
     try {
       const updatedLink = await changeVisibilityUseCase.execute(id);
-      setLinks((prev) => prev.map((link) => (link.id === id ? updatedLink : link)));
+      setLinks((prev) =>
+        prev.map((link) => (link.id === id ? updatedLink : link)),
+      );
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to change visibility");
+      setError(
+        err instanceof Error ? err.message : "Failed to change visibility",
+      );
       throw err;
     } finally {
       setIsLoading(false);
@@ -114,5 +126,7 @@ export const LinksProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     changeVisibility,
   };
 
-  return <LinksContext.Provider value={value}>{children}</LinksContext.Provider>;
+  return (
+    <LinksContext.Provider value={value}>{children}</LinksContext.Provider>
+  );
 };

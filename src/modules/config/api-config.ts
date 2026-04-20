@@ -19,6 +19,7 @@ export const API_CONFIG = {
       UPDATE: (id: string) => `/api/links/${id}`,
       VISIBILITY: (id: string) => `/api/links/visibility/${id}`,
       REORDER: "/api/links/update/reorder",
+      DELETE: (id: string) => `/api/links/${id}`,
     },
     PROFILE: {
       ME: "/api/profile/me",

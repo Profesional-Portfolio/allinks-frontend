@@ -116,7 +116,8 @@
 }
 
 .form-group input,
-.form-group textarea {
+.form-group textarea,
+.form-group select {
   width: 100%;
   padding: 10px 12px;
   border: 1px solid #e2e8f0;
@@ -145,8 +146,89 @@
   margin-top: 32px;
 }
 
+.profile-summary {
+  width: 100%;
+}
+
+.profile-name-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  justify-content: center;
+}
+
+.btn-share {
+  background: #f7fafc;
+  border: 1px solid #e2e8f0;
+  color: #4a5568;
+  padding: 8px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.btn-share:hover {
+  background-color: #ebf4ff;
+  border-color: #667eea;
+  color: #667eea;
+  transform: scale(1.1);
+}
+
+.share-feedback {
+  font-size: 12px;
+  color: #48bb78;
+  margin-top: 4px;
+  display: block;
+  font-weight: 600;
+}
+
 @media (max-width: 768px) {
+  .profile-page {
+    padding: 16px;
+  }
+
   .profile-container {
     grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .avatar-section {
+    padding: 24px 16px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .full-width {
+    grid-column: span 1;
+  }
+
+  .form-actions {
+    flex-direction: column-reverse;
+    gap: 8px;
+  }
+
+  .form-actions .btn-primary,
+  .form-actions .btn-secondary {
+    width: 100%;
+    text-align: center;
+  }
+
+  .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .btn-edit {
+    width: 100%;
+    text-align: center;
   }
 }

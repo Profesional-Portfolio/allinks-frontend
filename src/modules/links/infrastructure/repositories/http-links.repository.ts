@@ -1,4 +1,8 @@
-import type { LinksRepository, CreateLinkData, UpdateLinkData } from "../../domain/repositories/links.repository";
+import type {
+  LinksRepository,
+  CreateLinkData,
+  UpdateLinkData,
+} from "../../domain/repositories/links.repository";
 import type { Link } from "@/core/domain/models/link";
 import type { LinksApiService } from "../services/links-api.service";
 
@@ -22,9 +26,10 @@ export class HttpLinksRepository implements LinksRepository {
     return response.data;
   }
 
-  async deleteLink(_id: string): Promise<void> {
-    // No dedicated delete endpoint in backend; handled locally
-    return Promise.resolve();
+  async deleteLink(id: string): Promise<void> {
+    const response = await this.apiService.deleteLink(id);
+    if (!response.data) throw new Error("Failed to delete link");
+    return response.data;
   }
 
   async reorderLinks(links: Link[]): Promise<Link[]> {

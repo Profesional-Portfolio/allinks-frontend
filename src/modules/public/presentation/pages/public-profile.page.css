@@ -78,22 +78,92 @@
   justify-content: space-between;
   align-items: center;
   background-color: white;
-  padding: 16px 24px;
-  border-radius: 12px;
+  padding: 14px 16px;
+  border-radius: 14px;
   text-decoration: none;
   color: #2d3748;
-  font-weight: 600;
-  transition: transform 0.2s, background-color 0.2s;
+  transition: transform 0.2s, box-shadow 0.2s;
   border: 1px solid #edf2f7;
+  cursor: pointer;
 }
 
 .public-link-item:hover {
-  transform: scale(1.02);
-  background-color: #f7fafc;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
 }
 
-.external-icon {
+.link-item-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
+
+.platform-icon-wrap {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.platform-icon {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+}
+
+.link-item-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 0;
+}
+
+.link-platform-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1a202c;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.link-title-text {
+  font-size: 13px;
+  color: #718096;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.btn-copy-link {
+  flex-shrink: 0;
+  background: #f7fafc;
+  border: 1px solid #e2e8f0;
   color: #a0aec0;
+  padding: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  margin-left: 12px;
+}
+
+.btn-copy-link:hover {
+  background: #ebf4ff;
+  border-color: #667eea;
+  color: #667eea;
+}
+
+.btn-copy-link.copied {
+  background: #f0fff4;
+  border-color: #48bb78;
+  color: #48bb78;
 }
 
 .public-footer {

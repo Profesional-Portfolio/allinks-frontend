@@ -1,9 +1,12 @@
+import { Platforms } from "../enums/platforms.enum";
+
 export interface Link {
   id: string;
   title: string;
   url: string;
+  platform: Platforms;
   description?: string;
-  visibility: "public" | "private";
+  is_active: boolean;
   user_id: string;
   created_at: string;
   updated_at: string;

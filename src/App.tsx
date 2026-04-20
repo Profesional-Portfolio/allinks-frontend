@@ -22,14 +22,20 @@ const App: React.FC = () => {
           <LinksProvider>
             <Routes>
               {/* Public Auth routes */}
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="/register" element={<RegisterPage />} />
-              <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-              <Route path="/reset-password" element={<ResetPasswordPage />} />
-              <Route path="/verify-email" element={<VerifyEmailPage />} />
+              <Route path="/auth/login" element={<LoginPage />} />
+              <Route path="/auth/register" element={<RegisterPage />} />
+              <Route
+                path="/auth/forgot-password"
+                element={<ForgotPasswordPage />}
+              />
+              <Route
+                path="/auth/reset-password"
+                element={<ResetPasswordPage />}
+              />
+              <Route path="/auth/verify-email" element={<VerifyEmailPage />} />
 
               {/* Public Profile route */}
-              <Route path="/:username" element={<PublicProfilePage />} />
+              <Route path="/users/:username" element={<PublicProfilePage />} />
 
               {/* Protected Dashboard routes */}
               <Route
@@ -45,10 +51,7 @@ const App: React.FC = () => {
               </Route>
 
               {/* Catch all - redirect to home or login */}
-              <Route
-                path="*"
-                element={<Navigate to="/" replace />}
-              />
+              <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </LinksProvider>
         </ProfileProvider>

@@ -59,7 +59,12 @@ export const ResetPasswordPage: React.FC = () => {
         password: formData.password,
         password_confirmation: formData.password_confirmation,
       });
-      navigate("/login", { state: { message: "Password reset successful. Please log in with your new password." } });
+      navigate("/auth/login", {
+        state: {
+          message:
+            "Password reset successful. Please log in with your new password.",
+        },
+      });
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to reset password");
     } finally {
@@ -67,7 +72,8 @@ export const ResetPasswordPage: React.FC = () => {
     }
   };
 
-  if (isValidating) return <div className="auth-loading">Validating reset link...</div>;
+  if (isValidating)
+    return <div className="auth-loading">Validating reset link...</div>;
 
   return (
     <div className="auth-container">
@@ -88,18 +94,27 @@ export const ResetPasswordPage: React.FC = () => {
                 type="password"
                 required
                 value={formData.password}
-                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, password: e.target.value })
+                }
                 placeholder="••••••••"
               />
             </div>
             <div className="form-group">
-              <label htmlFor="password_confirmation">Confirm New Password</label>
+              <label htmlFor="password_confirmation">
+                Confirm New Password
+              </label>
               <input
                 id="password_confirmation"
                 type="password"
                 required
                 value={formData.password_confirmation}
-                onChange={(e) => setFormData({ ...formData, password_confirmation: e.target.value })}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    password_confirmation: e.target.value,
+                  })
+                }
                 placeholder="••••••••"
               />
             </div>
@@ -110,7 +125,9 @@ export const ResetPasswordPage: React.FC = () => {
         )}
 
         <div className="auth-footer">
-          <Link to="/login" className="auth-link">Back to Login</Link>
+          <Link to="/login" className="auth-link">
+            Back to Login
+          </Link>
         </div>
       </div>
     </div>

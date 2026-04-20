@@ -21,7 +21,9 @@ const updateProfileUseCase = new UpdateProfileUseCase(profileRepository);
 const updateAvatarUseCase = new UpdateAvatarUseCase(profileRepository);
 const deleteAvatarUseCase = new DeleteAvatarUseCase(profileRepository);
 
-export const ProfileProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+export const ProfileProvider: React.FC<{ children: ReactNode }> = ({
+  children,
+}) => {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -57,8 +59,8 @@ export const ProfileProvider: React.FC<{ children: ReactNode }> = ({ children })
     setIsLoading(true);
     setError(null);
     try {
-      const updatedProfile = await updateAvatarUseCase.execute(file);
-      setProfile(updatedProfile);
+      const avatarUrl = await updateAvatarUseCase.execute(file);
+      setProfile((prev) => (prev ? { ...prev, avatar_url: avatarUrl } : null));
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to update avatar");
       throw err;
@@ -91,5 +93,7 @@ export const ProfileProvider: React.FC<{ children: ReactNode }> = ({ children })
     deleteAvatar,
   };
 
-  return <ProfileContext.Provider value={value}>{children}</ProfileContext.Provider>;
+  return (
+    <ProfileContext.Provider value={value}>{children}</ProfileContext.Provider>
+  );
 };

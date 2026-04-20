@@ -1,41 +1,40 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useProfile } from "../hooks/use-profile";
 import "./profile.page.css";
 
 export const ProfilePage: React.FC = () => {
-  const { profile, isLoading, error, getProfile, updateProfile, updateAvatar, deleteAvatar } = useProfile();
+  const {
+    profile,
+    isLoading,
+    error,
+    getProfile,
+    updateProfile,
+    updateAvatar,
+    deleteAvatar,
+  } = useProfile();
+
+  const memoizedProfile = useMemo(() => profile, [profile]);
+
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    bio: "",
-    username: "",
+    first_name: memoizedProfile?.first_name || "",
+    last_name: memoizedProfile?.last_name || "",
+    bio: memoizedProfile?.bio || "",
+    username: memoizedProfile?.username || "",
   });
   const [isEditing, setIsEditing] = useState(false);
+  const [showCopied, setShowCopied] = useState(false);
+
+  const handleShare = () => {
+    if (!memoizedProfile?.username) return;
+    const url = `${window.location.origin}/users/${memoizedProfile.username}`;
+    navigator.clipboard.writeText(url);
+    setShowCopied(true);
+    setTimeout(() => setShowCopied(false), 2000);
+  };
 
   useEffect(() => {
     getProfile();
   }, [getProfile]);
-
-  useEffect(() => {
-    if (profile) {
-      setFormData((prev) => {
-        if (
-          prev.firstName === (profile.firstName || "") &&
-          prev.lastName === (profile.lastName || "") &&
-          prev.bio === (profile.bio || "") &&
-          prev.username === (profile.username || "")
-        ) {
-          return prev;
-        }
-        return {
-          firstName: profile.firstName || "",
-          lastName: profile.lastName || "",
-          bio: profile.bio || "",
-          username: profile.username || "",
-        };
-      });
-    }
-  }, [profile]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -65,30 +64,68 @@ export const ProfilePage: React.FC = () => {
   return (
     <div className="profile-page">
       <h1 className="page-title">Profile Settings</h1>
-      
-      {error && <div className="error-banner">Error loading profile: {error}</div>}
+
+      {error && (
+        <div className="error-banner">Error loading profile: {error}</div>
+      )}
 
       <div className="profile-container">
         <section className="avatar-section">
           <div className="avatar-wrapper">
             {profile?.avatar_url ? (
-              <img src={profile.avatar_url} alt="Profile Avatar" className="profile-avatar-large" />
+              <img
+                src={profile.avatar_url}
+                alt="Profile Avatar"
+                className="profile-avatar-large"
+              />
             ) : (
               <div className="avatar-placeholder-large">
-                {profile?.firstName?.[0]}{profile?.lastName?.[0]}
+                {profile?.first_name?.[0]}
+                {profile?.last_name?.[0]}
               </div>
             )}
             <label className="btn-upload-avatar">
-              <input type="file" onChange={handleAvatarChange} accept="image/*" />
+              <input
+                type="file"
+                onChange={handleAvatarChange}
+                accept="image/*"
+              />
               Change Photo
             </label>
             {profile?.avatar_url && (
-              <button onClick={deleteAvatar} className="btn-delete-avatar">Remove Photo</button>
+              <button onClick={deleteAvatar} className="btn-delete-avatar">
+                Remove Photo
+              </button>
             )}
           </div>
           <div className="profile-summary">
-            <h2>{profile?.firstName} {profile?.lastName}</h2>
+            <div className="profile-name-row">
+              <h2>
+                {profile?.first_name} {profile?.last_name}
+              </h2>
+              <button
+                onClick={handleShare}
+                className="btn-share"
+                title="Share Profile"
+              >
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
+                  <polyline points="16 6 12 2 8 6"></polyline>
+                  <line x1="12" y1="2" x2="12" y2="15"></line>
+                </svg>
+              </button>
+            </div>
             <p className="profile-handle">@{profile?.username}</p>
+            {showCopied && <span className="share-feedback">Link copied!</span>}
           </div>
         </section>
 
@@ -96,19 +133,26 @@ export const ProfilePage: React.FC = () => {
           <div className="section-header">
             <h3>Personal Information</h3>
             {!isEditing && (
-              <button onClick={() => setIsEditing(true)} className="btn-edit">Edit Profile</button>
+              <button onClick={() => setIsEditing(true)} className="btn-edit">
+                Edit Profile
+              </button>
             )}
           </div>
 
-          <form onSubmit={handleSubmit} className={isEditing ? "editing" : "viewing"}>
+          <form
+            onSubmit={handleSubmit}
+            className={isEditing ? "editing" : "viewing"}
+          >
             <div className="form-grid">
               <div className="form-group">
                 <label>First Name</label>
                 <input
                   type="text"
                   disabled={!isEditing}
-                  value={formData.firstName}
-                  onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
+                  value={formData.first_name}
+                  onChange={(e) =>
+                    setFormData({ ...formData, first_name: e.target.value })
+                  }
                 />
               </div>
               <div className="form-group">
@@ -116,8 +160,10 @@ export const ProfilePage: React.FC = () => {
                 <input
                   type="text"
                   disabled={!isEditing}
-                  value={formData.lastName}
-                  onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
+                  value={formData.last_name}
+                  onChange={(e) =>
+                    setFormData({ ...formData, last_name: e.target.value })
+                  }
                 />
               </div>
               <div className="form-group full-width">
@@ -126,7 +172,9 @@ export const ProfilePage: React.FC = () => {
                   type="text"
                   disabled={!isEditing}
                   value={formData.username}
-                  onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, username: e.target.value })
+                  }
                 />
               </div>
               <div className="form-group full-width">
@@ -134,7 +182,9 @@ export const ProfilePage: React.FC = () => {
                 <textarea
                   disabled={!isEditing}
                   value={formData.bio}
-                  onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, bio: e.target.value })
+                  }
                   placeholder="Tell us about yourself..."
                 />
               </div>
@@ -142,8 +192,16 @@ export const ProfilePage: React.FC = () => {
 
             {isEditing && (
               <div className="form-actions">
-                <button type="button" onClick={() => setIsEditing(false)} className="btn-secondary">Cancel</button>
-                <button type="submit" className="btn-primary">Save Changes</button>
+                <button
+                  type="button"
+                  onClick={() => setIsEditing(false)}
+                  className="btn-secondary"
+                >
+                  Cancel
+                </button>
+                <button type="submit" className="btn-primary">
+                  Save Changes
+                </button>
               </div>
             )}
           </form>

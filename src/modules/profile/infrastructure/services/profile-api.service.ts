@@ -8,35 +8,35 @@ export class ProfileApiService {
 
   async getProfile(): Promise<ApiResponse<Profile>> {
     return await this.httpClient.get<ApiResponse<Profile>>(
-      API_CONFIG.ENDPOINTS.PROFILE.ME
+      API_CONFIG.ENDPOINTS.PROFILE.ME,
     );
   }
 
   async updateProfile(data: UpdateProfileData): Promise<ApiResponse<Profile>> {
     return await this.httpClient.patch<ApiResponse<Profile>>(
       API_CONFIG.ENDPOINTS.PROFILE.ME,
-      data
+      data,
     );
   }
 
-  async updateAvatar(file: File): Promise<ApiResponse<Profile>> {
+  async updateAvatar(file: File): Promise<ApiResponse<string>> {
     const formData = new FormData();
-    formData.append("avatar", file);
-    
-    return await this.httpClient.patch<ApiResponse<Profile>>(
+    formData.append("image", file);
+
+    return await this.httpClient.patch<ApiResponse<string>>(
       API_CONFIG.ENDPOINTS.PROFILE.AVATAR,
       formData,
       {
         headers: {
           "Content-Type": "multipart/form-data",
         },
-      }
+      },
     );
   }
 
   async deleteAvatar(): Promise<ApiResponse<Profile>> {
     return await this.httpClient.delete<ApiResponse<Profile>>(
-      API_CONFIG.ENDPOINTS.PROFILE.AVATAR
+      API_CONFIG.ENDPOINTS.PROFILE.AVATAR,
     );
   }
 }

@@ -1,8 +1,10 @@
 import type { Link } from "@/core/domain/models/link";
+import { Platforms } from "@/core/domain/enums/platforms.enum";
 
 export interface CreateLinkData {
   title: string;
   url: string;
+  platform: Platforms;
   description?: string;
   visibility?: "public" | "private";
 }
@@ -10,7 +12,7 @@ export interface CreateLinkData {
 export interface UpdateLinkData {
   title?: string;
   url?: string;
-  platform?: string;
+  platform?: Platforms;
   is_active?: boolean;
 }
 

@@ -38,12 +38,10 @@ export class AuthApiService {
     );
   }
 
-  async getCurrentUser(): Promise<
-    ApiResponse<{ userId: string; email: string }>
-  > {
-    return await this.httpClient.get<
-      ApiResponse<{ userId: string; email: string }>
-    >(API_CONFIG.ENDPOINTS.AUTH.PROFILE);
+  async getCurrentUser(): Promise<ApiResponse<AuthUser>> {
+    return await this.httpClient.get<ApiResponse<AuthUser>>(
+      API_CONFIG.ENDPOINTS.AUTH.PROFILE
+    );
   }
 
   async refreshToken(): Promise<ApiResponse> {

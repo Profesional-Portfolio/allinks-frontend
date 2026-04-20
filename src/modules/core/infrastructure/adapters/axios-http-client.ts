@@ -78,15 +78,6 @@ export class AxiosHttpClient implements HttpClient {
           originalRequest,
         });
 
-        console.log(
-          "csrf",
-          error.response?.status === 403 && !originalRequest._csrfRetry,
-        );
-        console.log(
-          "retry",
-          error.response?.status === 401 && !originalRequest._retry,
-        );
-
         // If error is 403 (could be CSRF failure)
         if (error.response?.status === 403 && !originalRequest._csrfRetry) {
           originalRequest._csrfRetry = true;
@@ -104,6 +95,14 @@ export class AxiosHttpClient implements HttpClient {
 
         // If error is 401 and we haven't retried yet, try to refresh token
         if (error.response?.status === 401 && !originalRequest._retry) {
+          // If the request was to login or refresh endpoints, don't try to refresh again
+          if (
+            originalRequest.url?.includes("/api/auth/login") ||
+            originalRequest.url?.includes("/api/auth/refresh")
+          ) {
+            return Promise.reject(error);
+          }
+
           originalRequest._retry = true;
 
           try {
@@ -113,8 +112,10 @@ export class AxiosHttpClient implements HttpClient {
             // Retry the original request
             return this.axiosInstance(originalRequest);
           } catch (refreshError) {
-            // Refresh failed, redirect to login
-            window.location.href = "/login";
+            // Refresh failed, redirect to login only if not already on the login page
+            // if (window.location.pathname !== "/login") {
+            //   window.location.href = "/login";
+            // }
             return Promise.reject(refreshError);
           }
         }

@@ -1,4 +1,8 @@
-import type { ProfileRepository, Profile, UpdateProfileData } from "../../domain/models/profile";
+import type {
+  ProfileRepository,
+  Profile,
+  UpdateProfileData,
+} from "../../domain/models/profile";
 import type { ProfileApiService } from "../services/profile-api.service";
 
 export class HttpProfileRepository implements ProfileRepository {
@@ -16,7 +20,7 @@ export class HttpProfileRepository implements ProfileRepository {
     return response.data;
   }
 
-  async updateAvatar(file: File): Promise<Profile> {
+  async updateAvatar(file: File): Promise<string> {
     const response = await this.apiService.updateAvatar(file);
     if (!response.data) throw new Error("Failed to update avatar");
     return response.data;
