@@ -1,0 +1,1746 @@
+{
+  "swaggerDoc": {
+    "openapi": "3.0.0",
+    "components": {
+      "securitySchemes": {
+        "cookieAccessToken": {
+          "type": "http",
+          "scheme": "bearer",
+          "bearerFormat": "JWT",
+          "name": "accessToken"
+        },
+        "cookieRefreshToken": {
+          "type": "http",
+          "scheme": "bearer",
+          "bearerFormat": "JWT",
+          "name": "refreshToken"
+        }
+      },
+      "schemas": {
+        "User": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string"
+            },
+            "username": {
+              "type": "string"
+            },
+            "first_name": {
+              "type": "string"
+            },
+            "last_name": {
+              "type": "string"
+            },
+            "bio": {
+              "type": "string"
+            },
+            "avatar_url": {
+              "type": "string"
+            },
+            "is_active": {
+              "type": "boolean"
+            },
+            "email_verified": {
+              "type": "boolean"
+            },
+            "password_hash": {
+              "type": "string"
+            },
+            "created_at": {
+              "type": "string"
+            },
+            "updated_at": {
+              "type": "string"
+            },
+            "last_login_at": {
+              "type": "string"
+            }
+          }
+        },
+        "UserWithoutPassword": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string"
+            },
+            "username": {
+              "type": "string"
+            },
+            "first_name": {
+              "type": "string"
+            },
+            "last_name": {
+              "type": "string"
+            },
+            "bio": {
+              "type": "string"
+            },
+            "avatar_url": {
+              "type": "string"
+            },
+            "is_active": {
+              "type": "boolean"
+            },
+            "email_verified": {
+              "type": "boolean"
+            },
+            "created_at": {
+              "type": "string"
+            },
+            "updated_at": {
+              "type": "string"
+            },
+            "last_login_at": {
+              "type": "string"
+            }
+          }
+        },
+        "TokenPair": {
+          "type": "object",
+          "properties": {
+            "accessToken": {
+              "type": "string"
+            },
+            "refreshToken": {
+              "type": "string"
+            }
+          }
+        },
+        "TokenPayload": {
+          "type": "object",
+          "properties": {
+            "userId": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string"
+            }
+          }
+        },
+        "RegisterUserDto": {
+          "type": "object",
+          "properties": {
+            "email": {
+              "type": "string",
+              "example": "user@example.com"
+            },
+            "password": {
+              "type": "string",
+              "example": "Password123!"
+            },
+            "username": {
+              "type": "string",
+              "example": "usertest"
+            },
+            "first_name": {
+              "type": "string",
+              "example": "John"
+            },
+            "last_name": {
+              "type": "string",
+              "example": "Doe"
+            },
+            "bio": {
+              "type": "string",
+              "example": "This is a bio"
+            },
+            "avatar_url": {
+              "type": "string",
+              "example": "https://example.com/avatar.jpg"
+            },
+            "is_active": {
+              "type": "boolean"
+            },
+            "email_verified": {
+              "type": "boolean"
+            }
+          }
+        },
+        "LoginUserDto": {
+          "type": "object",
+          "properties": {
+            "email": {
+              "type": "string"
+            },
+            "password": {
+              "type": "string"
+            }
+          }
+        },
+        "ResetPasswordDto": {
+          "type": "object",
+          "properties": {
+            "password": {
+              "type": "string"
+            },
+            "password_confirmation": {
+              "type": "string"
+            }
+          }
+        },
+        "ForgotPasswordDto": {
+          "type": "object",
+          "properties": {
+            "email": {
+              "type": "string"
+            }
+          }
+        },
+        "ResendVerificationEmailDto": {
+          "type": "object",
+          "properties": {
+            "email": {
+              "type": "string"
+            }
+          }
+        },
+        "VerifyEmailDto": {
+          "type": "object",
+          "properties": {
+            "token": {
+              "type": "string"
+            }
+          }
+        },
+        "RefreshTokenDto": {
+          "type": "object",
+          "properties": {
+            "refreshToken": {
+              "type": "string"
+            }
+          }
+        },
+        "ValidateTokenDto": {
+          "type": "object",
+          "properties": {
+            "token": {
+              "type": "string"
+            }
+          }
+        },
+        "BaseResponse": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "type": "string"
+            },
+            "message": {
+              "type": "string"
+            },
+            "statusCode": {
+              "type": "number"
+            },
+            "timestamp": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "meta": {
+              "type": "object"
+            }
+          }
+        },
+        "AuthResponse": {
+          "allOf": [
+            {
+              "$ref": "#/components/schemas/BaseResponse"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "user": {
+                      "$ref": "#/components/schemas/UserWithoutPassword"
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "RefreshTokenResponse": {
+          "allOf": [
+            {
+              "$ref": "#/components/schemas/BaseResponse"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "tokens": {
+                      "$ref": "#/components/schemas/TokenPair"
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "ResendVerificationResponse": {
+          "allOf": [
+            {
+              "$ref": "#/components/schemas/BaseResponse"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "object"
+                }
+              }
+            }
+          ]
+        },
+        "VerifyEmailResponse": {
+          "allOf": [
+            {
+              "$ref": "#/components/schemas/BaseResponse"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "object"
+                }
+              }
+            }
+          ]
+        },
+        "UnauthorizedResponse": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "type": "string"
+            },
+            "message": {
+              "type": "string"
+            },
+            "statusCode": {
+              "type": "number"
+            },
+            "timestamp": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "meta": {
+              "type": "object"
+            }
+          }
+        },
+        "NotFoundResponse": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "type": "string"
+            },
+            "message": {
+              "type": "string"
+            },
+            "statusCode": {
+              "type": "number"
+            },
+            "timestamp": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "meta": {
+              "type": "object"
+            }
+          }
+        },
+        "ForbiddenResponse": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "type": "string"
+            },
+            "message": {
+              "type": "string"
+            },
+            "statusCode": {
+              "type": "number"
+            },
+            "timestamp": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "meta": {
+              "type": "object"
+            }
+          }
+        },
+        "BadRequestResponse": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "type": "string"
+            },
+            "message": {
+              "type": "string"
+            },
+            "statusCode": {
+              "type": "number"
+            },
+            "timestamp": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "meta": {
+              "type": "object"
+            }
+          }
+        },
+        "ConflictResponse": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "type": "string"
+            },
+            "message": {
+              "type": "string"
+            },
+            "statusCode": {
+              "type": "number"
+            },
+            "timestamp": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "meta": {
+              "type": "object"
+            }
+          }
+        },
+        "InternalServerErrorResponse": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "type": "string"
+            },
+            "message": {
+              "type": "string"
+            },
+            "statusCode": {
+              "type": "number"
+            },
+            "timestamp": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "meta": {
+              "type": "object"
+            }
+          }
+        },
+        "Link": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "title": {
+              "type": "string"
+            },
+            "url": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "visibility": {
+              "type": "string"
+            },
+            "user_id": {
+              "type": "string"
+            },
+            "created_at": {
+              "type": "string"
+            },
+            "updated_at": {
+              "type": "string"
+            }
+          }
+        },
+        "LinksResponse": {
+          "type": "array",
+          "items": {
+            "$ref": "#/components/schemas/Link"
+          }
+        },
+        "CreateLinkDto": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string"
+            },
+            "url": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "visibility": {
+              "type": "string"
+            }
+          }
+        },
+        "ChangeVisibilityDto": {
+          "type": "object",
+          "properties": {
+            "visibility": {
+              "type": "string"
+            }
+          }
+        },
+        "ReorderLinksDto": {
+          "type": "object",
+          "properties": {
+            "links": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/Link"
+              }
+            }
+          }
+        },
+        "UpdateLinkDto": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string"
+            },
+            "url": {
+              "type": "string"
+            },
+            "platform": {
+              "type": "string"
+            },
+            "is_active": {
+              "type": "boolean"
+            }
+          }
+        },
+        "Platform": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "display_name": {
+              "type": "string"
+            },
+            "url_pattern": {
+              "type": "string"
+            },
+            "icon_url": {
+              "type": "string"
+            },
+            "base_url": {
+              "type": "string"
+            },
+            "is_active": {
+              "type": "boolean"
+            },
+            "created_at": {
+              "type": "string"
+            },
+            "updated_at": {
+              "type": "string"
+            }
+          }
+        },
+        "UserLinksResponse": {
+          "allOf": [
+            {
+              "$ref": "#/components/schemas/BaseResponse"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Link"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "CreatedLinkResponse": {
+          "allOf": [
+            {
+              "$ref": "#/components/schemas/BaseResponse"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "$ref": "#/components/schemas/Link"
+                }
+              }
+            }
+          ]
+        },
+        "UpdatedLinkResponse": {
+          "allOf": [
+            {
+              "$ref": "#/components/schemas/BaseResponse"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "$ref": "#/components/schemas/Link"
+                }
+              }
+            }
+          ]
+        },
+        "ReorderedLinksResponse": {
+          "allOf": [
+            {
+              "$ref": "#/components/schemas/BaseResponse"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Link"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "ChangedVisibilityResponse": {
+          "allOf": [
+            {
+              "$ref": "#/components/schemas/BaseResponse"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "$ref": "#/components/schemas/Link"
+                }
+              }
+            }
+          ]
+        },
+        "ProfileResponse": {
+          "allOf": [
+            {
+              "$ref": "#/components/schemas/BaseResponse"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          ]
+        },
+        "UserWithLinks": {
+          "allOf": [
+            {
+              "$ref": "#/components/schemas/User"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "links": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Link"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "PublicProfileResponse": {
+          "allOf": [
+            {
+              "$ref": "#/components/schemas/BaseResponse"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "$ref": "#/components/schemas/UserWithLinks"
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "security": [
+      {
+        "cookieAccessToken": [],
+        "cookieRefreshToken": []
+      }
+    ],
+    "info": {
+      "title": "AllLinks API documentation",
+      "description": "API documentation for AllLinks",
+      "version": "1.0.0"
+    },
+    "tags": [
+      {
+        "name": "Auth",
+        "description": "Authentication endpoints"
+      },
+      {
+        "name": "Links",
+        "description": "Links endpoints"
+      },
+      {
+        "name": "Profile",
+        "description": "Profile endpoints"
+      },
+      {
+        "name": "Public",
+        "description": "Public endpoints"
+      }
+    ],
+    "paths": {
+      "/api/auth/register": {
+        "post": {
+          "summary": "Register a new user",
+          "tags": ["Auth"],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegisterUserDto"
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "User registered successfully",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/AuthResponse"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad request",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/BaseResponse"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "User already exists",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/BaseResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/auth/login": {
+        "post": {
+          "summary": "Login a user",
+          "tags": ["Auth"],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginUserDto"
+                }
+              }
+            }
+          },
+          "security": [
+            {
+              "cookieAccessToken": []
+            },
+            {
+              "cookieRefreshToken": []
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "User logged in successfully",
+              "headers": {
+                "Set-Cookie": {
+                  "description": "Sets the access and refresh tokens. Note: Multiple Set-Cookie headers are sent (accessToken and refreshToken).\n",
+                  "schema": {
+                    "type": "string",
+                    "example": "accessToken=...; Path=/; HttpOnly; Secure; SameSite=Lax, refreshToken=...; Path=/; HttpOnly; Secure; SameSite=Lax"
+                  }
+                }
+              },
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/AuthResponse"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad request",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/BaseResponse"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Invalid credentials",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/BaseResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/auth/refresh": {
+        "post": {
+          "summary": "Refresh a user's access token",
+          "tags": ["Auth"],
+          "responses": {
+            "200": {
+              "description": "User logged in successfully",
+              "headers": {
+                "Set-Cookie": {
+                  "description": "Sets the access and refresh tokens. Note: Multiple Set-Cookie headers are sent.\n",
+                  "schema": {
+                    "type": "string",
+                    "example": "accessToken=...; Path=/; HttpOnly; Secure; SameSite=Lax, refreshToken=...; Path=/; HttpOnly; Secure; SameSite=Lax"
+                  }
+                }
+              },
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/RefreshTokenResponse"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad request",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/BaseResponse"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Invalid credentials",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/BaseResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/auth/logout": {
+        "post": {
+          "summary": "Logout a user",
+          "tags": ["Auth"],
+          "security": [
+            {
+              "cookieAccessToken": []
+            },
+            {
+              "cookieRefreshToken": []
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "User logged out successfully",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/BaseResponse"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Invalid credentials",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/BaseResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/auth/profile": {
+        "get": {
+          "summary": "Get user profile",
+          "tags": ["Auth"],
+          "security": [
+            {
+              "cookieAccessToken": []
+            },
+            {
+              "cookieRefreshToken": []
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "User profile retrieved successfully",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/BaseResponse"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Invalid credentials",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/BaseResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/auth/verify-email": {
+        "post": {
+          "summary": "Verify user email",
+          "tags": ["Auth"],
+          "parameters": [
+            {
+              "in": "query",
+              "name": "token",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "example": "faa96266dc3df2c68e150d510d2f683610da98a668a7281382fb675f3eefce54"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "User email verified successfully",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/BaseResponse"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Invalid token",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/BaseResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/auth/resend-verification": {
+        "post": {
+          "summary": "Resend verification email",
+          "tags": ["Auth"],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResendVerificationEmailDto"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Verification email sent successfully",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/BaseResponse"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Invalid credentials",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/BaseResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/auth/forgot-password": {
+        "post": {
+          "summary": "Forgot password",
+          "tags": ["Auth"],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForgotPasswordDto"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Password reset email sent successfully",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/BaseResponse"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Invalid credentials",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/BaseResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/auth/reset-password": {
+        "post": {
+          "summary": "Reset password",
+          "tags": ["Auth"],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResetPasswordDto"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Password reset successfully",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/BaseResponse"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Invalid credentials",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/BaseResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/auth/validate-token": {
+        "post": {
+          "summary": "Validate reset password token",
+          "tags": ["Auth"],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidateTokenDto"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Token is valid",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/BaseResponse"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid token",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/BaseResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/links": {
+        "get": {
+          "tags": ["Links"],
+          "summary": "Get all links",
+          "responses": {
+            "200": {
+              "description": "A list of links",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/UserLinksResponse"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/UnauthorizedResponse"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/InternalServerErrorResponse"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "post": {
+          "tags": ["Links"],
+          "summary": "Create a new link",
+          "headers": {
+            "Set-Cookie": {
+              "description": "Sets the access and refresh tokens. Note: Multiple Set-Cookie headers are sent.\n",
+              "schema": {
+                "type": "string",
+                "example": "accessToken=...; Path=/; HttpOnly; Secure; SameSite=Lax, refreshToken=...; Path=/; HttpOnly; Secure; SameSite=Lax"
+              }
+            }
+          },
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateLinkDto"
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "Link created successfully",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/CreatedLinkResponse"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/UnauthorizedResponse"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/InternalServerErrorResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/links/visibility/{id}": {
+        "patch": {
+          "tags": ["Links"],
+          "summary": "Change link visibility",
+          "headers": {
+            "Set-Cookie": {
+              "description": "Sets the access and refresh tokens. Note: Multiple Set-Cookie headers are sent.\n",
+              "schema": {
+                "type": "string",
+                "example": "accessToken=...; Path=/; HttpOnly; Secure; SameSite=Lax, refreshToken=...; Path=/; HttpOnly; Secure; SameSite=Lax"
+              }
+            }
+          },
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Link visibility changed successfully",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ChangedVisibilityResponse"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/UnauthorizedResponse"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/InternalServerErrorResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/links/update/reorder": {
+        "patch": {
+          "tags": ["Links"],
+          "summary": "Reorder links",
+          "headers": {
+            "Set-Cookie": {
+              "description": "Sets the access and refresh tokens. Note: Multiple Set-Cookie headers are sent.\n",
+              "schema": {
+                "type": "string",
+                "example": "accessToken=...; Path=/; HttpOnly; Secure; SameSite=Lax, refreshToken=...; Path=/; HttpOnly; Secure; SameSite=Lax"
+              }
+            }
+          },
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReorderLinksDto"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Links reordered successfully",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ReorderedLinksResponse"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/UnauthorizedResponse"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbidden",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ForbiddenResponse"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/InternalServerErrorResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/links/:id": {
+        "patch": {
+          "tags": ["Links"],
+          "summary": "Update link",
+          "headers": {
+            "Set-Cookie": {
+              "description": "Sets the access and refresh tokens. Note: Multiple Set-Cookie headers are sent.\n",
+              "schema": {
+                "type": "string",
+                "example": "accessToken=...; Path=/; HttpOnly; Secure; SameSite=Lax, refreshToken=...; Path=/; HttpOnly; Secure; SameSite=Lax"
+              }
+            }
+          },
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateLinkDto"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Link updated successfully",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/UpdatedLinkResponse"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/UnauthorizedResponse"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbidden",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ForbiddenResponse"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/InternalServerErrorResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/profile/me": {
+        "get": {
+          "summary": "Get profile",
+          "tags": ["Profile"],
+          "headers": {
+            "Set-Cookie": {
+              "description": "Sets the access and refresh tokens. Note: Multiple Set-Cookie headers are sent.\n",
+              "schema": {
+                "type": "string",
+                "example": "accessToken=...; Path=/; HttpOnly; Secure; SameSite=Lax, refreshToken=...; Path=/; HttpOnly; Secure; SameSite=Lax"
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Profile retrieved successfully",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ProfileResponse"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/UnauthorizedResponse"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal server error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/InternalServerErrorResponse"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "patch": {
+          "summary": "Update profile",
+          "tags": ["Profile"],
+          "headers": {
+            "Set-Cookie": {
+              "description": "Sets the access and refresh tokens. Note: Multiple Set-Cookie headers are sent.\n",
+              "schema": {
+                "type": "string",
+                "example": "accessToken=...; Path=/; HttpOnly; Secure; SameSite=Lax, refreshToken=...; Path=/; HttpOnly; Secure; SameSite=Lax"
+              }
+            }
+          },
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateProfileRequest"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Profile updated successfully",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ProfileResponse"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/UnauthorizedResponse"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal server error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/InternalServerErrorResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/profile/avatar": {
+        "patch": {
+          "summary": "Update avatar",
+          "tags": ["Profile"],
+          "headers": {
+            "Set-Cookie": {
+              "description": "Sets the access and refresh tokens. Note: Multiple Set-Cookie headers are sent.\n",
+              "schema": {
+                "type": "string",
+                "example": "accessToken=...; Path=/; HttpOnly; Secure; SameSite=Lax, refreshToken=...; Path=/; HttpOnly; Secure; SameSite=Lax"
+              }
+            }
+          },
+          "requestBody": {
+            "required": true,
+            "content": {
+              "multipart/form-data": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateAvatarRequest"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Avatar updated successfully",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ProfileResponse"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/UnauthorizedResponse"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal server error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/InternalServerErrorResponse"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "delete": {
+          "summary": "Delete avatar",
+          "tags": ["Profile"],
+          "headers": {
+            "Set-Cookie": {
+              "description": "Sets the access and refresh tokens. Note: Multiple Set-Cookie headers are sent.\n",
+              "schema": {
+                "type": "string",
+                "example": "accessToken=...; Path=/; HttpOnly; Secure; SameSite=Lax, refreshToken=...; Path=/; HttpOnly; Secure; SameSite=Lax"
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Avatar deleted successfully",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ProfileResponse"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/UnauthorizedResponse"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal server error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/InternalServerErrorResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/public/:username": {
+        "get": {
+          "summary": "Get public profile",
+          "tags": ["Public"],
+          "parameters": [
+            {
+              "in": "path",
+              "name": "username",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Public profile retrieved successfully",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/PublicProfileResponse"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "User not found",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/NotFoundResponse"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal server error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/InternalServerErrorResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/public/check-availability/:username": {
+        "get": {
+          "summary": "Check availability of username",
+          "tags": ["Public"],
+          "parameters": [
+            {
+              "in": "path",
+              "name": "username",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Username is available",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/UsernameAvailabilityResponse"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Username not available",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ConflictResponse"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal server error",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/InternalServerErrorResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "customOptions": {}
+}

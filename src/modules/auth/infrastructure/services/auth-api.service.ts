@@ -51,4 +51,40 @@ export class AuthApiService {
       API_CONFIG.ENDPOINTS.AUTH.REFRESH
     );
   }
+
+  async verifyEmail(token: string): Promise<ApiResponse> {
+    return await this.httpClient.post<ApiResponse>(
+      API_CONFIG.ENDPOINTS.AUTH.VERIFY_EMAIL,
+      {},
+      { params: { token } }
+    );
+  }
+
+  async resendVerification(email: string): Promise<ApiResponse> {
+    return await this.httpClient.post<ApiResponse>(
+      API_CONFIG.ENDPOINTS.AUTH.RESEND_VERIFICATION,
+      { email }
+    );
+  }
+
+  async forgotPassword(email: string): Promise<ApiResponse> {
+    return await this.httpClient.post<ApiResponse>(
+      API_CONFIG.ENDPOINTS.AUTH.FORGOT_PASSWORD,
+      { email }
+    );
+  }
+
+  async resetPassword(data: { token: string; password: string; password_confirmation: string }): Promise<ApiResponse> {
+    return await this.httpClient.post<ApiResponse>(
+      API_CONFIG.ENDPOINTS.AUTH.RESET_PASSWORD,
+      data
+    );
+  }
+
+  async validateToken(token: string): Promise<ApiResponse> {
+    return await this.httpClient.post<ApiResponse>(
+      API_CONFIG.ENDPOINTS.AUTH.VALIDATE_TOKEN,
+      { token }
+    );
+  }
 }

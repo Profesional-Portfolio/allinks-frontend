@@ -6,11 +6,13 @@ import type {
 
 export class AxiosHttpClient implements HttpClient {
   private axiosInstance: AxiosInstance;
+  private csrfToken: string | null = null;
+  private csrfPromise: Promise<string> | null = null;
 
   constructor(baseURL: string) {
     this.axiosInstance = axios.create({
       baseURL,
-      withCredentials: true, // Important for httpOnly cookies
+      withCredentials: true,
       headers: {
         "Content-Type": "application/json",
       },
@@ -19,15 +21,50 @@ export class AxiosHttpClient implements HttpClient {
     this.setupInterceptors();
   }
 
+  private async fetchCsrfToken(): Promise<string> {
+    if (this.csrfToken) return this.csrfToken;
+    if (this.csrfPromise) return this.csrfPromise;
+
+    this.csrfPromise = this.axiosInstance
+      .get<{ csrfToken: string }>("/api/csrf-token")
+      .then((response) => {
+        this.csrfToken = response.data.csrfToken;
+        this.csrfPromise = null;
+        return this.csrfToken;
+      })
+      .catch((error) => {
+        this.csrfPromise = null;
+        throw error;
+      });
+
+    return this.csrfPromise;
+  }
+
   private setupInterceptors(): void {
     // Request interceptor
     this.axiosInstance.interceptors.request.use(
-      (config) => {
+      async (config) => {
+        const method = config.method?.toUpperCase();
+        const stateChangingMethods = ["POST", "PUT", "PATCH", "DELETE"];
+
+        if (
+          stateChangingMethods.includes(method || "") &&
+          config.url !== "/api/csrf-token"
+        ) {
+          try {
+            const token = await this.fetchCsrfToken();
+            if (config.headers) {
+              config.headers["x-csrf-token"] = token;
+            }
+          } catch (error) {
+            console.error("Failed to fetch CSRF token", error);
+          }
+        }
         return config;
       },
       (error) => {
         return Promise.reject(error);
-      }
+      },
     );
 
     // Response interceptor
@@ -37,6 +74,33 @@ export class AxiosHttpClient implements HttpClient {
       },
       async (error) => {
         const originalRequest = error.config;
+        console.log("Error in axios interceptor", error.response, {
+          originalRequest,
+        });
+
+        console.log(
+          "csrf",
+          error.response?.status === 403 && !originalRequest._csrfRetry,
+        );
+        console.log(
+          "retry",
+          error.response?.status === 401 && !originalRequest._retry,
+        );
+
+        // If error is 403 (could be CSRF failure)
+        if (error.response?.status === 403 && !originalRequest._csrfRetry) {
+          originalRequest._csrfRetry = true;
+          this.csrfToken = null; // Reset token
+          try {
+            const token = await this.fetchCsrfToken();
+            if (originalRequest.headers) {
+              originalRequest.headers["x-csrf-token"] = token;
+            }
+            return this.axiosInstance(originalRequest);
+          } catch (csrfError) {
+            return Promise.reject(csrfError);
+          }
+        }
 
         // If error is 401 and we haven't retried yet, try to refresh token
         if (error.response?.status === 401 && !originalRequest._retry) {
@@ -44,7 +108,7 @@ export class AxiosHttpClient implements HttpClient {
 
           try {
             // Try to refresh the token
-            await this.axiosInstance.post("/auth/refresh");
+            await this.axiosInstance.post("/api/auth/refresh");
 
             // Retry the original request
             return this.axiosInstance(originalRequest);
@@ -56,7 +120,7 @@ export class AxiosHttpClient implements HttpClient {
         }
 
         return Promise.reject(error);
-      }
+      },
     );
   }
 
@@ -71,7 +135,7 @@ export class AxiosHttpClient implements HttpClient {
   async get<T>(url: string, config?: RequestConfig): Promise<T> {
     const response = await this.axiosInstance.get<T>(
       url,
-      this.mapConfig(config)
+      this.mapConfig(config),
     );
     return response.data;
   }
@@ -79,12 +143,12 @@ export class AxiosHttpClient implements HttpClient {
   async post<T>(
     url: string,
     data?: unknown,
-    config?: RequestConfig
+    config?: RequestConfig,
   ): Promise<T> {
     const response = await this.axiosInstance.post<T>(
       url,
       data,
-      this.mapConfig(config)
+      this.mapConfig(config),
     );
     return response.data;
   }
@@ -92,12 +156,12 @@ export class AxiosHttpClient implements HttpClient {
   async put<T>(
     url: string,
     data?: unknown,
-    config?: RequestConfig
+    config?: RequestConfig,
   ): Promise<T> {
     const response = await this.axiosInstance.put<T>(
       url,
       data,
-      this.mapConfig(config)
+      this.mapConfig(config),
     );
     return response.data;
   }
@@ -105,7 +169,7 @@ export class AxiosHttpClient implements HttpClient {
   async delete<T>(url: string, config?: RequestConfig): Promise<T> {
     const response = await this.axiosInstance.delete<T>(
       url,
-      this.mapConfig(config)
+      this.mapConfig(config),
     );
     return response.data;
   }
@@ -113,12 +177,12 @@ export class AxiosHttpClient implements HttpClient {
   async patch<T>(
     url: string,
     data?: unknown,
-    config?: RequestConfig
+    config?: RequestConfig,
   ): Promise<T> {
     const response = await this.axiosInstance.patch<T>(
       url,
       data,
-      this.mapConfig(config)
+      this.mapConfig(config),
     );
     return response.data;
   }
