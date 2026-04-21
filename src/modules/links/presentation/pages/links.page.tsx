@@ -44,8 +44,6 @@ export const LinksPage: React.FC = () => {
     }
   };
 
-  console.log({ links });
-
   return (
     <div className="links-page">
       <header className="links-header">

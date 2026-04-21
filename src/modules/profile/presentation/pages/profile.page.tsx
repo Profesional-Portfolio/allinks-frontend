@@ -1,6 +1,7 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useEffectEvent, useState } from "react";
 import { useProfile } from "../hooks/use-profile";
 import "./profile.page.css";
+import type { Profile } from "../../domain/models/profile";
 
 export const ProfilePage: React.FC = () => {
   const {
@@ -13,20 +14,18 @@ export const ProfilePage: React.FC = () => {
     deleteAvatar,
   } = useProfile();
 
-  const memoizedProfile = useMemo(() => profile, [profile]);
-
   const [formData, setFormData] = useState({
-    first_name: memoizedProfile?.first_name || "",
-    last_name: memoizedProfile?.last_name || "",
-    bio: memoizedProfile?.bio || "",
-    username: memoizedProfile?.username || "",
+    first_name: profile?.first_name ?? "",
+    last_name: profile?.last_name ?? "",
+    bio: profile?.bio ?? "",
+    username: profile?.username ?? "",
   });
   const [isEditing, setIsEditing] = useState(false);
   const [showCopied, setShowCopied] = useState(false);
 
   const handleShare = () => {
-    if (!memoizedProfile?.username) return;
-    const url = `${window.location.origin}/users/${memoizedProfile.username}`;
+    if (!profile?.username) return;
+    const url = `${window.location.origin}/users/${profile.username}`;
     navigator.clipboard.writeText(url);
     setShowCopied(true);
     setTimeout(() => setShowCopied(false), 2000);
@@ -35,6 +34,21 @@ export const ProfilePage: React.FC = () => {
   useEffect(() => {
     getProfile();
   }, [getProfile]);
+
+  const updateFormData = useEffectEvent((profile: Profile) => {
+    setFormData({
+      first_name: profile.first_name,
+      last_name: profile.last_name,
+      bio: profile.bio ?? "",
+      username: profile.username,
+    });
+  });
+
+  useEffect(() => {
+    if (profile) {
+      updateFormData(profile);
+    }
+  }, [profile]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

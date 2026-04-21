@@ -51,7 +51,7 @@ const getPlatformIconUrl = (platform: string): string => {
 const httpClient = new AxiosHttpClient(API_CONFIG.BASE_URL);
 const publicApiService = new PublicApiService(httpClient);
 
-export const PublicProfilePage: React.FC = () => {
+export const PublicProfilePage = () => {
   const { username } = useParams<{ username: string }>();
   const [profile, setProfile] = useState<PublicProfile>(
     null as unknown as PublicProfile,
@@ -75,7 +75,6 @@ export const PublicProfilePage: React.FC = () => {
         setError(null);
         try {
           const response = await publicApiService.getPublicProfile(username);
-          console.log({ response });
           if (response.data) {
             setProfile(response.data);
           } else {
@@ -106,8 +105,6 @@ export const PublicProfilePage: React.FC = () => {
       </div>
     );
   }
-
-  console.log({ profile });
 
   return (
     <div className="public-profile-container">
