@@ -74,13 +74,13 @@ export const HomePage: React.FC = () => {
               />
             ) : (
               <div className="user-avatar-placeholder-small">
-                {user?.firstName?.[0]}
-                {user?.lastName?.[0]}
+                {user?.first_name?.[0]}
+                {user?.last_name?.[0]}
               </div>
             )}
             <div className="user-info-small">
               <p className="user-name-small">
-                {user?.firstName} {user?.lastName}
+                {user?.first_name} {user?.last_name}
               </p>
               <p className="user-handle-small">@{user?.username}</p>
             </div>
