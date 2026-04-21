@@ -1,4 +1,4 @@
-import { AuthRepository } from "../../domain/repositories/auth.repository";
+import type { AuthRepository } from "../../domain/repositories/auth.repository";
 
 export class RefreshTokenUseCase {
   constructor(private authRepository: AuthRepository) {}
