@@ -51,7 +51,7 @@ const App: React.FC = () => {
               </Route>
 
               {/* Catch all - redirect to home or login */}
-              <Route path="*" element={<Navigate to="/" replace />} />
+              <Route path="*" element={<Navigate to="/auth/login" replace />} />
             </Routes>
           </LinksProvider>
         </ProfileProvider>

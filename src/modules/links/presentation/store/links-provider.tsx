@@ -14,6 +14,7 @@ import type {
   UpdateLinkData,
 } from "../../domain/repositories/links.repository";
 import { LinksContext, type LinksContextType } from "./links-context";
+import { DeleteLinkUseCase } from "../../application/use-cases/delete-link.use-case";
 
 // Initialize dependencies
 const httpClient = new AxiosHttpClient(API_CONFIG.BASE_URL);
@@ -26,6 +27,7 @@ const createLinkUseCase = new CreateLinkUseCase(linksRepository);
 const updateLinkUseCase = new UpdateLinkUseCase(linksRepository);
 const reorderLinksUseCase = new ReorderLinksUseCase(linksRepository);
 const changeVisibilityUseCase = new ChangeVisibilityUseCase(linksRepository);
+const deleteLinkUseCase = new DeleteLinkUseCase(linksRepository);
 
 export const LinksProvider: React.FC<{ children: ReactNode }> = ({
   children,
@@ -39,7 +41,6 @@ export const LinksProvider: React.FC<{ children: ReactNode }> = ({
     setError(null);
     try {
       const fetchedLinks = await getLinksUseCase.execute();
-      console.log({ fetchedLinks });
       setLinks(fetchedLinks);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to fetch links");
@@ -79,9 +80,17 @@ export const LinksProvider: React.FC<{ children: ReactNode }> = ({
   };
 
   const deleteLink = async (id: string) => {
-    // Note: Backend doesn't have a delete endpoint, so we handle it locally for now
-    // If the backend is updated, this should call a deleteUseCase
-    setLinks((prev) => prev.filter((link) => link.id !== id));
+    setIsLoading(true);
+    setError(null);
+    try {
+      await deleteLinkUseCase.execute(id);
+      setLinks((prev) => prev.filter((link) => link.id !== id));
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to delete link");
+      throw err;
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const reorderLinks = async (newLinks: Link[]) => {
@@ -100,9 +109,11 @@ export const LinksProvider: React.FC<{ children: ReactNode }> = ({
     setIsLoading(true);
     setError(null);
     try {
-      const updatedLink = await changeVisibilityUseCase.execute(id);
+      await changeVisibilityUseCase.execute(id);
       setLinks((prev) =>
-        prev.map((link) => (link.id === id ? updatedLink : link)),
+        prev.map((link) =>
+          link.id === id ? { ...link, is_active: !link.is_active } : link,
+        ),
       );
     } catch (err) {
       setError(

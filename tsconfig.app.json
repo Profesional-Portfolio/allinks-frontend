@@ -26,7 +26,6 @@
 
     /* Path aliases */
     "paths": {
-      "baseUrl": ".",
       "@/*": ["./src/*"],
       "@/auth/*": ["./src/modules/auth/*"],
       "@/home/*": ["./src/modules/home/*"],

@@ -113,9 +113,9 @@ export class AxiosHttpClient implements HttpClient {
             return this.axiosInstance(originalRequest);
           } catch (refreshError) {
             // Refresh failed, redirect to login only if not already on the login page
-            // if (window.location.pathname !== "/login") {
-            //   window.location.href = "/login";
-            // }
+            if (window.location.pathname !== "/login") {
+              window.location.href = "/auth/login";
+            }
             return Promise.reject(refreshError);
           }
         }
