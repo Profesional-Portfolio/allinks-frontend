@@ -15,6 +15,8 @@ export default defineConfig({
     alias: {
       "@/": path.resolve(__dirname, "./src"),
       "@/auth": path.resolve(__dirname, "./src/modules/auth"),
+      "@/profile": path.resolve(__dirname, "./src/modules/profile"),
+      "@/public": path.resolve(__dirname, "./src/modules/public"),
       "@/config": path.resolve(__dirname, "./src/modules/config"),
       "@/home": path.resolve(__dirname, "./src/modules/home"),
       "@/core": path.resolve(__dirname, "./src/modules/core"),

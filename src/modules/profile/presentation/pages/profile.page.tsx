@@ -1,4 +1,4 @@
-import React, { useEffect, useEffectEvent, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useProfile } from "../hooks/use-profile";
 import "./profile.page.css";
 import type { Profile } from "../../domain/models/profile";
@@ -35,18 +35,18 @@ export const ProfilePage: React.FC = () => {
     getProfile();
   }, [getProfile]);
 
-  const updateFormData = useEffectEvent((profile: Profile) => {
-    setFormData({
-      first_name: profile.first_name,
-      last_name: profile.last_name,
-      bio: profile.bio ?? "",
-      username: profile.username,
-    });
-  });
-
   useEffect(() => {
+    const initProfile = (profile: Profile) => {
+      setFormData({
+        first_name: profile.first_name,
+        last_name: profile.last_name,
+        bio: profile.bio ?? "",
+        username: profile.username,
+      });
+    }
+
     if (profile) {
-      updateFormData(profile);
+      initProfile(profile)
     }
   }, [profile]);
 

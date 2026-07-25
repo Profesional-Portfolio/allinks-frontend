@@ -34,8 +34,9 @@ export class HttpAuthRepository implements AuthRepository {
       id: apiUser.id,
       email: apiUser.email,
       username: apiUser.username,
-      first_name: apiUser.first_name || apiUser.first_name || "",
-      last_name: apiUser.last_name || apiUser.last_name || "",
+      first_name: apiUser.first_name || "",
+      last_name: apiUser.last_name || "",
+      avatar_url: apiUser.avatar_url || "",
     };
 
     this.tokenStorage.saveUser(user);

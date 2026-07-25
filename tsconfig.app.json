@@ -28,6 +28,8 @@
     "paths": {
       "@/*": ["./src/*"],
       "@/auth/*": ["./src/modules/auth/*"],
+      "@/profile/*": ["./src/modules/profile/*"],
+      "@/public/*": ["./src/modules/public/*"],
       "@/home/*": ["./src/modules/home/*"],
       "@/config/*": ["./src/modules/config/*"],
       "@/core/*": ["./src/modules/core/*"]

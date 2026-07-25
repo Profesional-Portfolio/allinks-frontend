@@ -1,10 +1,13 @@
 import React from "react";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useAuth } from "@/auth/presentation/hooks/use-auth";
+import { useProfile } from "@/profile/presentation/hooks/use-profile";
+// import useProfile
 import "./home.page.css";
 
 export const HomePage: React.FC = () => {
-  const { user, logout } = useAuth();
+  const { logout } = useAuth();
+  const { profile } = useProfile()
   const navigate = useNavigate();
 
   const handleLogout = async () => {
@@ -66,23 +69,23 @@ export const HomePage: React.FC = () => {
 
         <div className="sidebar-footer">
           <div className="user-profile-small">
-            {user?.avatar_url ? (
+            {profile?.avatar_url ? (
               <img
-                src={user.avatar_url}
-                alt={user.username}
+                src={profile.avatar_url}
+                alt={profile.username}
                 className="user-avatar-small"
               />
             ) : (
               <div className="user-avatar-placeholder-small">
-                {user?.first_name?.[0]}
-                {user?.last_name?.[0]}
+                {profile?.first_name?.[0]}
+                {profile?.last_name?.[0]}
               </div>
             )}
             <div className="user-info-small">
               <p className="user-name-small">
-                {user?.first_name} {user?.last_name}
+                {profile?.first_name} {profile?.last_name}
               </p>
-              <p className="user-handle-small">@{user?.username}</p>
+              <p className="user-handle-small">@{profile?.username}</p>
             </div>
           </div>
           <button
